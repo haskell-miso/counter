@@ -41,7 +41,7 @@ app = (component (Model 0) updateModel viewModel)
   { styles = [ Sheet sheet ]
   }
 -----------------------------------------------------------------------------
-updateModel :: Action -> Effect ROOT Model Action
+updateModel :: Action -> Effect () () Model Action
 updateModel = \case
   AddOne event -> do
     value += 1
@@ -52,7 +52,7 @@ updateModel = \case
   SayHelloWorld ->
     io_ (consoleLog "Hello World!")
 -----------------------------------------------------------------------------
-viewModel :: Model -> View Model Action
+viewModel :: Model -> View () () Model Action
 viewModel x = H.div_
   [ P.class_ "counter-container" ]
   [ H.h1_
@@ -149,27 +149,27 @@ sheet =
     , CSS.transform "translateY(-2px)"
     ]
   , CSS.keyframes_ "pulse"
-    [ CSS.pct 0 =:
+    [ CSS.at (CSS.pct 0)
       [ CSS.transform "scale(1)"
       ]
-    , CSS.pct 50 =:
+    , CSS.at (CSS.pct 50)
       [ CSS.transform "scale(1.1)"
       ]
-    , CSS.pct 100 =:
+    , CSS.at (CSS.pct 100)
       [ CSS.transform "scale(1)"
       ]
     ]
   , CSS.selector_ ".counter-display.animate"
     [ CSS.animation "pulse 0.3s ease"
     ]
-  , CSS.media_ "(max-width: 480px)"
-    [ ".counter-container" =:
+  , CSS.media_ (CSS.maxWidth_ "480px")
+    [ CSS.rule_ ".counter-container"
       [ CSS.padding (CSS.rem 1.5)
       ]
-    , ".counter-display" =:
+    , CSS.rule_ ".counter-display"
       [ CSS.fontSize (CSS.rem 3)
       ]
-    , "button" =:
+    , CSS.rule_ "button"
       [ CSS.fontSize (CSS.rem 1.2)
       , CSS.width (CSS.rem 2.5)
       , CSS.width (CSS.rem 2.5)
